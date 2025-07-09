@@ -24,5 +24,5 @@ jobs:
       - name: Run a multi-line script
         run: |
           sudo apt -qq install -y nginx
-          cp ./nginx-conf/*.conf /usr/share/nginx
-          nginx -t -c *.conf
+          cp ./nginx-conf/nginx.conf /usr/share/nginx
+          nginx -t -c nginx.conf
