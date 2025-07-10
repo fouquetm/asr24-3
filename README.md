@@ -12,10 +12,10 @@ Ce projet utilise un script Bash et un environnement isolé pour **valider la sy
 │   ├── nginx.conf        # Fichier de configuration principal à valider
 │   └── mime.types        # (Optionnel) fichier des types MIME
 ├── scripts/
-│   └── setup-nginx-test-env.sh  # Script Bash de préparation
+│   └── nginx-linter.sh   # Script Bash de préparation
 ├── .github/
 │   └── workflows/
-│       └── validate-nginx.yaml  # Pipeline GitHub Actions
+│       └── nginx-pr.yaml # Pipeline GitHub Actions
 ```
 
 ---
