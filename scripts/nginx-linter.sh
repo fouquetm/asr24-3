@@ -2,27 +2,23 @@
 
 set -e
 
-# Target test environment directory
-BASE_DIR="./nginx-test-env"
+# Répertoire de test utilisé comme racine simulée de Nginx
+BASE_DIR="./nginx-conf"
 CONF_SOURCE="./nginx-conf/nginx.conf"
 MIME_SOURCE="./nginx-conf/mime.types"
-CONF_FILE="$BASE_DIR/nginx.conf"
-MIME_FILE="$BASE_DIR/mime.types"
 HTML_FILE="$BASE_DIR/html/index.html"
 LOG_DIR="$BASE_DIR/logs"
 
 echo "🔧 Setting up Nginx test environment in $BASE_DIR..."
 
-# Create required directories
-mkdir -p "$BASE_DIR/html" "$LOG_DIR"
+# Crée les répertoires requis
+mkdir -p "$BASE_DIR/html"
+mkdir -p "$LOG_DIR"
 
-# Copy or generate mime.types
-if [ -f "$MIME_SOURCE" ]; then
-  echo "📄 Copying custom mime.types from $MIME_SOURCE"
-  cp "$MIME_SOURCE" "$MIME_FILE"
-else
-  echo "⚠️ No mime.types found at $MIME_SOURCE, generating minimal version..."
-  cat > "$MIME_FILE" <<EOF
+# Copie ou génère mime.types
+if [ ! -f "$MIME_SOURCE" ]; then
+  echo "⚠️ mime.types manquant, génération d'une version minimale"
+  cat > "$MIME_SOURCE" <<EOF
 types {
     text/html             html htm shtml;
     text/css              css;
@@ -31,20 +27,20 @@ types {
     text/plain            txt;
 }
 EOF
+else
+  echo "📄 mime.types détecté dans $MIME_SOURCE"
 fi
 
-# Copy nginx.conf
+# Vérifie que nginx.conf existe
 if [ ! -f "$CONF_SOURCE" ]; then
-  echo "❌ nginx.conf not found at $CONF_SOURCE"
+  echo "❌ nginx.conf introuvable à $CONF_SOURCE"
   exit 1
 fi
-echo "📄 Copying nginx.conf from $CONF_SOURCE"
-cp "$CONF_SOURCE" "$CONF_FILE"
 
-# Create minimal index.html
+# Crée un fichier HTML minimal
 cat > "$HTML_FILE" <<EOF
 <!DOCTYPE html>
 <html><body><h1>Nginx test OK</h1></body></html>
 EOF
 
-echo "✅ Test environment ready at: $BASE_DIR"
+echo "✅ Dossier de test prêt dans $BASE_DIR"
